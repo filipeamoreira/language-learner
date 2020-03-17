@@ -1,0 +1,3 @@
+project=ll_api
+test=minitest
+template=erb
