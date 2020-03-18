@@ -3,6 +3,7 @@ module Api
     module Quizzes
       class Show
         include Api::Action
+        accept :json
 
         def call(params)
           # binding.pry
