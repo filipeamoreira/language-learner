@@ -1,9 +1,9 @@
 import React from 'react';
 
-function FreeTextAnswer(props) {
+function FreeText(props) {
   return(
     <input type="text" name="answer" />
   )
 }
 
-export default FreeTextAnswer;
+export default FreeText;

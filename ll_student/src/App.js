@@ -1,7 +1,6 @@
 import React from 'react';
 import Quiz from './components/quiz';
-import Question from './components/question';
-import FreeTextAnswer from './components/freeTextAnswer';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 class App extends React.Component {
@@ -10,7 +9,7 @@ class App extends React.Component {
 
     this.state = {
       quizTitle: '',
-      questions: []
+      questions: [],
     };
   }
 
@@ -35,9 +34,7 @@ class App extends React.Component {
     return (
         <div className="App">
           <h1>Language Learner Student App</h1>
-          <h2>{quizTitle}</h2>
-          <p>{questions.length} questions</p>
-        <Quiz title={quizTitle} questions={questions}/>
+        <Quiz title={quizTitle} questions={questions} />
         </div>
     );
   }
