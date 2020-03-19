@@ -1,5 +1,6 @@
 import React from 'react';
 import Quiz from './components/quiz';
+import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -35,15 +36,15 @@ class App extends React.Component {
     const {quizId, quizTitle, quizQuestions, initialQuestion} = this.state;
 
     return (
-        <div className="App">
-          <h1>Language Learner Student App</h1>
-          <Quiz
-           title={quizTitle}
-           questions={quizQuestions}
-           id={quizId}
-           initialQuestion={initialQuestion}
+      <Container>
+        <h1>Language Learner Student App</h1>
+        <Quiz
+          title={quizTitle}
+          questions={quizQuestions}
+          id={quizId}
+          initialQuestion={initialQuestion}
         />
-        </div>
+      </Container>
     );
   }
 }

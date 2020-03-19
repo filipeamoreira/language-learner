@@ -80,6 +80,26 @@ class Quiz extends React.Component {
     return null;
   }
 
+  submitButton() {
+    const { currentQuestion } = this.state;
+
+    console.log(`currentQuestion => ${currentQuestion}`);
+    console.log(`questions.length => ${this.props.questions.length}`);
+
+    if (currentQuestion === this.props.questions.length - 1) {
+      return (
+        <button
+          className="btn btn-primary float-right"
+          type="button" onClick={this._submit}>
+          Submit Answers
+        </button>
+      )
+    }
+
+    return null;
+  }
+
+
   render() {
     const { title, questions } = this.props;
     const { currentQuestion } = this.state;
@@ -90,9 +110,9 @@ class Quiz extends React.Component {
           <h2>{title}</h2>
           <p>Question {currentQuestion + 1} of {questions.length}</p>
           {this.questions()}
-          <input type="submit" value="Submit answers" />
           {this.previousButton()}
           {this.nextButton()}
+          {this.submitButton()}
         </Form>
       </div>
     );

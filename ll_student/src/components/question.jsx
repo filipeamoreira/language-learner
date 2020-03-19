@@ -22,7 +22,7 @@ function Question(props) {
   }
 
   return(
-    <div>
+    <div className="question">
       <h2 className="enunciate">{enunciate}</h2>
       {answerComponent(type, answers, enunciate)}
     </div>
