@@ -1,40 +1,102 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Question from './question';
-import FreeText from './answers/freeText';
-import MultipleChoice from './answers/multipleChoice';
 
-function Quiz(props) {
-  const questions = props.questions;
+class Quiz extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const questionTypeComponent = (type, answers, enunciate) => {
-    switch(type){
-    case 'free-text':
-      return <FreeText />;
-    case 'multiple-choice':
-      return <MultipleChoice answers={answers} enunciate={enunciate}/>;
-    default:
-      console.log('Out of switch scope');
+    this.state = {
+      currentQuestion: props.initialQuestion
+    };
+  }
+
+  questions() {
+    const { questions } = this.props;
+    const { currentQuestion } = this.state;
+
+    return questions.map((question, index) => (
+      <div key={index}>
+        <Question
+          type={question.type}
+          answers={question.answers}
+          enunciate={question.enunciate}
+          currentQuestion={currentQuestion}
+          questionIndex={index}
+          />
+      </div>
+    ));
+  }
+
+  _next = () => {
+    const questionsLength = this.props.questions.length;
+    let { currentQuestion } = this.state;
+
+    currentQuestion = currentQuestion >= questionsLength - 1 ? questionsLength : currentQuestion + 1;
+    this.setState({
+      currentQuestion: currentQuestion
+    })
+  }
+
+  _prev = () => {
+    let { currentQuestion } = this.state;
+
+    currentQuestion = currentQuestion <= 0 ? 0 : currentQuestion - 1;
+    this.setState({
+      currentQuestion: currentQuestion
+    })
+  }
+
+
+  previousButton() {
+    const { currentQuestion } = this.state;
+    if (currentQuestion !== 0){
+      return (
+        <button
+          className="btn btn-primary float-left"
+          type="button" onClick={this._prev}>
+          Previous
+        </button>
+      )
     }
-  };
 
-  const questionItems = questions.map((question, index) => (
-    <div key={index}>
-      <Question enunciate={question.enunciate} />
-      {questionTypeComponent(question.type, question.answers, question.enunciate)}
-    </div>
-  ));
+    return null;
+  }
 
-  return(
-    <div>
-      <Form>
-        <h2>{props.title}</h2>
-        <p>{props.questions.length} questions</p>
-        {questionItems}
-        <input type="submit" value="Submit answers" />
-      </Form>
-    </div>
-  );
+
+  nextButton() {
+    const { currentQuestion } = this.state;
+
+    if (currentQuestion < this.props.questions.length - 1){
+      return (
+        <button
+          className="btn btn-primary float-right"
+          type="button" onClick={this._next}>
+          Next
+        </button>
+      )
+    }
+
+    return null;
+  }
+
+  render() {
+    const { title, questions } = this.props;
+    const { currentQuestion } = this.state;
+
+    return(
+      <div>
+        <Form>
+          <h2>{title}</h2>
+          <p>Question {currentQuestion + 1} of {questions.length}</p>
+          {this.questions()}
+          <input type="submit" value="Submit answers" />
+          {this.previousButton()}
+          {this.nextButton()}
+        </Form>
+      </div>
+    );
+  }
 }
 
 export default Quiz;

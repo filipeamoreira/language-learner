@@ -8,8 +8,10 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      quizId: null,
       quizTitle: '',
-      questions: [],
+      quizQuestions: [],
+      initialQuestion: 0
     };
   }
 
@@ -18,8 +20,9 @@ class App extends React.Component {
       .then(response => response.json())
       .then((data) => {
         this.setState({
+          quizId: data.id,
           quizTitle: data.title,
-          questions: data.questions
+          quizQuestions: data.questions
         });
       });
   }
@@ -29,12 +32,17 @@ class App extends React.Component {
   }
 
   render() {
-    const {quizTitle, questions} = this.state;
+    const {quizId, quizTitle, quizQuestions, initialQuestion} = this.state;
 
     return (
         <div className="App">
           <h1>Language Learner Student App</h1>
-        <Quiz title={quizTitle} questions={questions} />
+          <Quiz
+           title={quizTitle}
+           questions={quizQuestions}
+           id={quizId}
+           initialQuestion={initialQuestion}
+        />
         </div>
     );
   }
