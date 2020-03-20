@@ -4,14 +4,14 @@ import MultipleChoice from './answers/multipleChoice';
 
 function Question(props) {
 
-  const { type, answers, enunciate, currentQuestion, questionIndex } = props;
+  const { type, answers, enunciate, currentQuestion, questionIndex, handleChange } = props;
 
-  const answerComponent = (type, answers, enunciate) => {
+  const answerComponent = () => {
     switch(type){
     case 'free-text':
-      return <FreeText />;
+      return <FreeText handleChange={props.handleChange} questionIndex={questionIndex} />;
     case 'multiple-choice':
-      return <MultipleChoice answers={answers} enunciate={enunciate}/>;
+      return <MultipleChoice answers={answers} enunciate={enunciate} handleChange={handleChange} questionIndex={questionIndex} />;
     default:
       console.log('Out of switch scope');
     }
@@ -24,7 +24,7 @@ function Question(props) {
   return(
     <div className="question">
       <h2 className="enunciate">{enunciate}</h2>
-      {answerComponent(type, answers, enunciate)}
+      {answerComponent()}
     </div>
   );
 }

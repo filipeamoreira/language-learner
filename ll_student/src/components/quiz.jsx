@@ -23,12 +23,13 @@ class Quiz extends React.Component {
           enunciate={question.enunciate}
           currentQuestion={currentQuestion}
           questionIndex={index}
+          handleChange={this.handleChange}
           />
       </div>
     ));
   }
 
-  _next = () => {
+  next = () => {
     const questionsLength = this.props.questions.length;
     let { currentQuestion } = this.state;
 
@@ -38,7 +39,7 @@ class Quiz extends React.Component {
     })
   }
 
-  _prev = () => {
+  prev = () => {
     let { currentQuestion } = this.state;
 
     currentQuestion = currentQuestion <= 0 ? 0 : currentQuestion - 1;
@@ -47,6 +48,18 @@ class Quiz extends React.Component {
     })
   }
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('this.state');
+    console.log(this.state);
+  }
 
   previousButton() {
     const { currentQuestion } = this.state;
@@ -54,7 +67,7 @@ class Quiz extends React.Component {
       return (
         <button
           className="btn btn-primary float-left"
-          type="button" onClick={this._prev}>
+          type="button" onClick={this.prev}>
           Previous
         </button>
       )
@@ -71,7 +84,7 @@ class Quiz extends React.Component {
       return (
         <button
           className="btn btn-primary float-right"
-          type="button" onClick={this._next}>
+          type="button" onClick={this.next}>
           Next
         </button>
       )
@@ -90,7 +103,7 @@ class Quiz extends React.Component {
       return (
         <button
           className="btn btn-primary float-right"
-          type="button" onClick={this._submit}>
+          type="button" onClick={this.handleSubmit}>
           Submit Answers
         </button>
       )
