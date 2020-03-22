@@ -1,19 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Question from './question';
 
-class Quiz extends React.Component {
-  constructor(props) {
-    super(props);
+function Quiz(props) {
+  const [currentQuestion, setCurrentQuestion] = useState(props.initialQuestion);
+  const [formData, setFormData] = useState({});
 
-    this.state = {
-      currentQuestion: props.initialQuestion
-    };
-  }
+  const { questions, title } = props;
 
-  questions() {
-    const { questions } = this.props;
-    const { currentQuestion } = this.state;
+  const questionItems = () => {
 
     return questions.map((question, index) => (
       <div key={index}>
@@ -23,51 +18,41 @@ class Quiz extends React.Component {
           enunciate={question.enunciate}
           currentQuestion={currentQuestion}
           questionIndex={index}
-          handleChange={this.handleChange}
+          handleChange={handleChange}
           />
       </div>
     ));
   }
 
-  next = () => {
-    const questionsLength = this.props.questions.length;
-    let { currentQuestion } = this.state;
-
-    currentQuestion = currentQuestion >= questionsLength - 1 ? questionsLength : currentQuestion + 1;
-    this.setState({
-      currentQuestion: currentQuestion
-    })
+  const next = () => {
+    const newCurrentQuestion = currentQuestion >= questions.length - 1 ? questions.length : currentQuestion + 1;
+    setCurrentQuestion(newCurrentQuestion);
   }
 
-  prev = () => {
-    let { currentQuestion } = this.state;
-
-    currentQuestion = currentQuestion <= 0 ? 0 : currentQuestion - 1;
-    this.setState({
-      currentQuestion: currentQuestion
-    })
+  const prev = () => {
+    const newCurrentQuestion = currentQuestion <= 0 ? 0 : currentQuestion - 1;
+    setCurrentQuestion(newCurrentQuestion);
   }
 
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
+    let data = { ...formData };
+    formData[name] = value;
+    setFormData(formData);
   }
 
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('this.state');
-    console.log(this.state);
+    console.log('formData');
+    console.log(formData);
   }
 
-  previousButton() {
-    const { currentQuestion } = this.state;
+  const previousButton = () => {
     if (currentQuestion !== 0){
       return (
         <button
           className="btn btn-primary float-left"
-          type="button" onClick={this.prev}>
+          type="button" onClick={prev}>
           Previous
         </button>
       )
@@ -77,14 +62,13 @@ class Quiz extends React.Component {
   }
 
 
-  nextButton() {
-    const { currentQuestion } = this.state;
+  const nextButton = () => {
 
-    if (currentQuestion < this.props.questions.length - 1){
+    if (currentQuestion < questions.length - 1){
       return (
         <button
           className="btn btn-primary float-right"
-          type="button" onClick={this.next}>
+          type="button" onClick={next}>
           Next
         </button>
       )
@@ -93,17 +77,15 @@ class Quiz extends React.Component {
     return null;
   }
 
-  submitButton() {
-    const { currentQuestion } = this.state;
-
+  const submitButton = () => {
     console.log(`currentQuestion => ${currentQuestion}`);
-    console.log(`questions.length => ${this.props.questions.length}`);
+    console.log(`questions.length => ${questions.length}`);
 
-    if (currentQuestion === this.props.questions.length - 1) {
+    if (currentQuestion === questions.length - 1) {
       return (
         <button
           className="btn btn-primary float-right"
-          type="button" onClick={this.handleSubmit}>
+          type="button" onClick={handleSubmit}>
           Submit Answers
         </button>
       )
@@ -113,23 +95,18 @@ class Quiz extends React.Component {
   }
 
 
-  render() {
-    const { title, questions } = this.props;
-    const { currentQuestion } = this.state;
-
-    return(
-      <div>
-        <Form>
-          <h2>{title}</h2>
-          <p>Question {currentQuestion + 1} of {questions.length}</p>
-          {this.questions()}
-          {this.previousButton()}
-          {this.nextButton()}
-          {this.submitButton()}
-        </Form>
-      </div>
-    );
-  }
+  return(
+    <div>
+      <Form>
+        <h2>{title}</h2>
+        <p>Question {currentQuestion + 1} of {questions.length}</p>
+        {questionItems()}
+        {previousButton()}
+        {nextButton()}
+        {submitButton()}
+      </Form>
+    </div>
+  );
 }
 
 export default Quiz;

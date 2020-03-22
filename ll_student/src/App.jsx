@@ -1,52 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Quiz from './components/quiz';
 import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [quizTitle, setQuizTitle] = useState('');
+  const [quizId, setQuizId] = useState(null);
+  const [quizQuestions, setQuizQuestions] = useState([]);
 
-    this.state = {
-      quizId: null,
-      quizTitle: '',
-      quizQuestions: [],
-      initialQuestion: 0
+
+  useEffect(() => {
+    const fetchQuiz = async () => {
+      let response = await fetch('http://localhost:2300/api/quizzes/1');
+      const data = await response.json();
+
+      setQuizId(data.id);
+      setQuizTitle(data.title);
+      setQuizQuestions(data.questions);
     };
-  }
 
-  fetchQuiz() {
-    window.fetch('http://localhost:2300/api/quizzes/1')
-      .then(response => response.json())
-      .then((data) => {
-        this.setState({
-          quizId: data.id,
-          quizTitle: data.title,
-          quizQuestions: data.questions
-        });
-      });
-  }
+    fetchQuiz();
 
-  componentDidMount() {
-    this.fetchQuiz();
-  }
+  }, []);
 
-  render() {
-    const {quizId, quizTitle, quizQuestions, initialQuestion} = this.state;
-
-    return (
-      <Container>
-        <h1>Language Learner Student App</h1>
-        <Quiz
-          title={quizTitle}
-          questions={quizQuestions}
-          id={quizId}
-          initialQuestion={initialQuestion}
+  return (
+    <Container>
+      <h1>Language Learner Student App</h1>
+      <Quiz
+        title={quizTitle}
+        questions={quizQuestions}
+        id={quizId}
+        initialQuestion={0}
         />
-      </Container>
-    );
-  }
+    </Container>
+  );
 }
 
 export default App;
